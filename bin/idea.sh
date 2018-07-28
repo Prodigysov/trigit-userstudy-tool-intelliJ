@@ -17,7 +17,7 @@ message()
   elif [ -n "`which notify-send`" ]; then
     notify-send "ERROR: $TITLE: $1"
   else
-    echo "ERROR: $TITLE\n$1"
+    printf "ERROR: $TITLE\n$1\n"
   fi
 }
 
@@ -63,8 +63,8 @@ if [ -n "$IDEA_JDK" -a -x "$IDEA_JDK/bin/java" ]; then
   JDK="$IDEA_JDK"
 fi
 
-if [ -z "$JDK" -a -s "$HOME/.IdeaIC2018.1/config/idea.jdk" ]; then
-  USER_JRE=`"$CAT" $HOME/.IdeaIC2018.1/config/idea.jdk`
+if [ -z "$JDK" -a -s "$HOME/.IdeaIC2018.2/config/idea.jdk" ]; then
+  USER_JRE=`"$CAT" $HOME/.IdeaIC2018.2/config/idea.jdk`
   if [ ! -d "$USER_JRE" ]; then
     USER_JRE="$IDE_HOME/$USER_JRE"
   fi
@@ -159,9 +159,9 @@ if [ -n "$IDEA_VM_OPTIONS" -a -r "$IDEA_VM_OPTIONS" ]; then
 elif [ -r "$IDE_HOME.vmoptions" ]; then
   # Toolbox
   VM_OPTIONS_FILE="$IDE_HOME.vmoptions"
-elif [ -r "$HOME/.IdeaIC2018.1/config/idea$BITS.vmoptions" ]; then
+elif [ -r "$HOME/.IdeaIC2018.2/config/idea$BITS.vmoptions" ]; then
   # user-overridden
-  VM_OPTIONS_FILE="$HOME/.IdeaIC2018.1/config/idea$BITS.vmoptions"
+  VM_OPTIONS_FILE="$HOME/.IdeaIC2018.2/config/idea$BITS.vmoptions"
 elif [ -r "$IDE_BIN_HOME/idea$BITS.vmoptions" ]; then
   # default, standard installation
   VM_OPTIONS_FILE="$IDE_BIN_HOME/idea$BITS.vmoptions"
@@ -178,7 +178,7 @@ if [ -r "$VM_OPTIONS_FILE" ]; then
     if [ "$OS_TYPE" = "Linux" ]; then
       VM_OPTIONS=`echo "$VM_OPTIONS" | "$SED" -e "s|-agentlib:yjpagent\(-linux\)\?\([^=]*\)|-agentpath:$IDE_BIN_HOME/libyjpagent-linux\2.so|"`
     else
-      VM_OPTIONS=`echo "$VM_OPTIONS" | "$SED" -e "s|-agentlib:yjpagent[^ ]\+||"`
+      VM_OPTIONS=`echo "$VM_OPTIONS" | "$SED" -e "s|-agentlib:yjpagent[^ ]*||"`
     fi
   fi
 else
@@ -206,7 +206,7 @@ IFS="$(printf '\n\t')"
   ${VM_OPTIONS} \
   "-XX:ErrorFile=$HOME/java_error_in_IDEA_%p.log" \
   "-XX:HeapDumpPath=$HOME/java_error_in_IDEA.hprof" \
-  -Didea.paths.selector=IdeaIC2018.1 \
+  -Didea.paths.selector=IdeaIC2018.2 \
   "-Djb.vmOptionsFile=$VM_OPTIONS_FILE" \
   ${IDE_PROPERTIES_PROPERTY} \
   -Didea.platform.prefix=Idea -Didea.jre.check=true \
